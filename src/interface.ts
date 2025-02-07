@@ -1,7 +1,10 @@
-import {Request} from "express";
+import { Request } from 'express';
 
+export type TUserInfo = {
+ _id: string;
+}
 export interface IInfoRequest extends Request {
-    user?: { _id: string }
+    user?: TUserInfo
 }
 
 export interface IAppError extends Error {

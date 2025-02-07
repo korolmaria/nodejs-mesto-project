@@ -1,10 +1,13 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express, { Request, Response } from 'express';
 import mongoose from 'mongoose';
-import { errors } from 'celebrate';
+import {celebrate, errors, Joi} from 'celebrate';
 import userRouter from './routes/users';
 import cardRouter from './routes/cards';
-import { IAppError, IInfoRequest } from './interface';
+import { IAppError } from './interface';
 import limiter from './limiter';
+import login from './controllers/login';
+import { createUser } from './controllers/users';
+import auth from './middlewares/auth.';
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -12,16 +15,21 @@ const app = express();
 mongoose.connect('mongodb://localhost:27017/mestodb').then(() => {});
 
 app.use(limiter);
-app.use((req: IInfoRequest, res: Response, next: NextFunction) => {
-  req.user = {
-    _id: '67a47e7c0d5682a0f923ae16',
-  };
-
-  next();
-});
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.post('/signin', login);
+app.post('/signup', celebrate({
+  body: Joi.object().keys({
+    password: Joi.string().required(),
+    email: Joi.string().email().required(),
+    name: Joi.string().min(2).max(30),
+    about: Joi.string().min(2).max(200),
+    avatar: Joi.string(),
+  }),
+}), createUser);
+
+app.use(auth);
 
 app.use(userRouter);
 app.use(cardRouter);

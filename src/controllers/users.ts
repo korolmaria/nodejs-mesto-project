@@ -20,9 +20,6 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
     .catch(next);
 };
 
-
-
-
 export const findUserById = async (req: Request, res: Response, next: NextFunction) => {
   user.findById(req.params.userId)
     .then((user) => {
@@ -52,5 +49,17 @@ export const updateAvatar = async (req: IInfoRequest, res: Response, next: NextF
     upsert: true,
   })
     .then((user) => res.send({ user }.user))
+    .catch(next);
+};
+
+export const getCurrentUserInfo = async (req: IInfoRequest, res: Response, next: NextFunction) => {
+  user.findById(req.user?._id)
+    .then((user) => {
+      if (user) {
+        res.send({ user }.user);
+      } else {
+        throw new NotFoundError('Такой пользоатель не существует!');
+      }
+    })
     .catch(next);
 };
