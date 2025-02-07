@@ -1,9 +1,9 @@
 import express, { Request, Response, NextFunction } from 'express';
 import mongoose from 'mongoose';
+import { errors } from 'celebrate';
 import userRouter from './routes/users';
 import cardRouter from './routes/cards';
 import { IAppError, IInfoRequest } from './interface';
-import { errors } from 'celebrate';
 import limiter from './limiter';
 
 const { PORT = 3000 } = process.env;
@@ -26,7 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(userRouter);
 app.use(cardRouter);
 app.use('*', (req: Request, res: Response) => {
-  res.status(404).send({ message: 'Нет таких данных' });
+  res.status(404).send({ message: 'Переданы некорректные данные!' });
 });
 
 app.use(errors());
