@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import bcrypt from 'bcryptjs';
 import user from '../models/user';
 import { IInfoRequest } from '../interface';
 import NotFoundError from '../errors/not-found-err';
@@ -10,9 +11,11 @@ export const getUsers = async (req: Request, res: Response, next: NextFunction) 
 };
 
 export const createUser = async (req: Request, res: Response, next: NextFunction) => {
-  const { name, about, avatar } = req.body;
-
-  user.create({ name, about, avatar })
+  bcrypt.hash(req.body.password, 10)
+    .then((hash) => user.create({
+      ...req.body,
+      password: hash,
+    }))
     .then((user) => res.send({ user }.user))
     .catch(next);
 };
