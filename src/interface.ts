@@ -1,4 +1,4 @@
-import {Request} from "express";
+import { Request } from 'express';
 
 export interface IInfoRequest extends Request {
     user?: { _id: string }

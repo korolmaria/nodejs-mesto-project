@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import mongoose from 'mongoose';
-import { errors } from 'celebrate';
+// import { errors } from 'celebrate';
 import userRouter from './routes/users';
 import cardRouter from './routes/cards';
 import { IAppError, IInfoRequest } from './interface';
@@ -29,9 +29,12 @@ app.use('*', (req: Request, res: Response) => {
   res.status(404).send({ message: 'Переданы некорректные данные!' });
 });
 
-app.use(errors());
-app.use((err: IAppError, req: Request, res: Response) => {
-  const { statusCode, message } = err;
+app.use((err: IAppError, req: Request, res: Response, next: NextFunction) => {
+  const { statusCode, message, name } = err;
+
+  if (['CastError', 'ValidationError', 'Error'].includes(name)) {
+    res.status(400).send({ message: 'Переданы некорректные данные!' });
+  }
 
   res.status(statusCode || 500).send({ message: statusCode === 500 ? 'На сервере произошла ошибка!' : message });
 });
