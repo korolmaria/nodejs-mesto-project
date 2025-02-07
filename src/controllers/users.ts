@@ -13,7 +13,7 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
   const { name, about, avatar } = req.body;
 
   user.create({ name, about, avatar })
-    .then((user) => res.send({ user }.user))
+    .then((user) => res.status(201).send({ user }.user))
     .catch(next);
 };
 

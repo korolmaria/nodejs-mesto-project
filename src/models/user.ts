@@ -25,6 +25,6 @@ const userSchema = new Schema<IUser, UserModel>({
     type: String,
     required: true,
   },
-});
+}, { versionKey: false });
 
 export default model<IUser, UserModel>('user', userSchema);
