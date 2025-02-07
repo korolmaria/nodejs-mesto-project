@@ -26,7 +26,6 @@ const cardSchema = new Schema<ICard, CardModel>({
     ref: 'user',
     required: true,
   },
-
   likes: {
     type: [Schema.Types.ObjectId],
     default: [],
@@ -35,6 +34,6 @@ const cardSchema = new Schema<ICard, CardModel>({
     type: Date,
     default: Date.now,
   },
-});
+}, { versionKey: false });
 
 export default model<ICard, CardModel>('card', cardSchema);

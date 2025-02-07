@@ -38,7 +38,15 @@
         "ts": "never"
       }
     ],
-    "no-underscore-dangle": "off",
+    "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
+    "no-underscore-dangle": [
+      "error",
+      {
+        "allow": [
+          "_id"
+        ]
+      }
+    ],
     "no-shadow": "off"
   }
 }

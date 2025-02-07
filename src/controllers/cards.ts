@@ -13,7 +13,7 @@ export const createCard = async (req: IInfoRequest, res: Response, next: NextFun
   const { name, link } = req.body;
 
   card.create({ name, link, owner: req.user?._id })
-    .then((card) => res.send({ card }.card))
+    .then((card) => res.status(201).send({ card }.card))
     .catch(next);
 };
 

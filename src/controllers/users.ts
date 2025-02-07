@@ -16,9 +16,12 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
       ...req.body,
       password: hash,
     }))
-    .then((user) => res.send({ user }.user))
+    .then((user) => res.status(201).send({ user }.user))
     .catch(next);
 };
+
+
+
 
 export const findUserById = async (req: Request, res: Response, next: NextFunction) => {
   user.findById(req.params.userId)
