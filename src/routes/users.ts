@@ -17,12 +17,19 @@ router.patch('/users/me', celebrate({
     avatar: Joi.string(),
   }).unknown(),
 }), updateProfile);
+
 router.get('/users/me/', getCurrentUserInfo);
+
 router.patch('/users/me/avatar', celebrate({
   body: Joi.object().keys({
     avatar: Joi.string(),
   }).unknown(),
 }), updateAvatar);
-router.get('/users/:userId', findUserById);
+
+router.get('/users/:userId', celebrate({
+  params: Joi.object().keys({
+    userId: Joi.string().min(10).max(30),
+  }),
+}), findUserById);
 
 export default router;

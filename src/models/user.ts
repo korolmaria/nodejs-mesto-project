@@ -3,7 +3,7 @@ import {
 } from 'mongoose';
 import validator from 'validator';
 import bcrypt from 'bcryptjs';
-import NotFoundUser from '../errors/not-user';
+import NotFoundUser from '../errors/not-auth';
 
 export interface IUser {
     email: string,
@@ -14,7 +14,6 @@ export interface IUser {
 }
 
 interface UserModel extends Model<IUser> {
-  // eslint-disable-next-line no-unused-vars
   findUserByCredentials: (email: string, password: string) => Promise<Document<unknown, any, IUser>>
 }
 
@@ -48,6 +47,12 @@ const userSchema = new Schema<IUser, UserModel>({
   avatar: {
     type: String,
     default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
+    validate: {
+      validator(v) {
+        return /^((http|https):\/\/)?(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i.test(v);
+      },
+      message: (props) => 'Введите корректное значение!',
+    },
   },
 }, { versionKey: false });
 

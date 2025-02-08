@@ -38,6 +38,8 @@
         "ts": "never"
       }
     ],
+    "no-shadow": "off",
+    "no-unused-vars": "off",
     "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
     "no-underscore-dangle": [
       "error",
@@ -46,7 +48,6 @@
           "_id"
         ]
       }
-    ],
-    "no-shadow": "off"
+    ]
   }
 }
