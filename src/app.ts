@@ -57,7 +57,7 @@ app.use((err: IAppError, req: Request, res: Response, next: NextFunction) => {
   }
 
   res.status(statusCode || STATUSES.SERVER)
-    .send({ message: statusCode === 500 ? SERVER_FAILED_MESSAGE : message });
+    .send({ message: statusCode === STATUSES.SERVER ? SERVER_FAILED_MESSAGE : message });
 });
 
 app.use('*', (req: Request, res: Response) => {
