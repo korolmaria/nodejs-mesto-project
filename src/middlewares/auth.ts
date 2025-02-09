@@ -1,14 +1,16 @@
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { IInfoRequest, TUserInfo } from '../interface';
+import { AUTH_FAILED_MESSAGE } from '../constants/errors';
+import STATUSES from '../constants/codes';
 
 export default (req: IInfoRequest, res: Response, next: NextFunction) => {
   const { cookie } = req.headers;
 
   if (!cookie && !cookie?.startsWith('token=')) {
     res
-      .status(401)
-      .send({ message: 'Необходима авторизация' });
+      .status(STATUSES.AUTH)
+      .send({ message: AUTH_FAILED_MESSAGE });
 
     return;
   }
@@ -20,8 +22,8 @@ export default (req: IInfoRequest, res: Response, next: NextFunction) => {
     payload = jwt.verify(token, 'some-secret-key') as TUserInfo;
   } catch (err) {
     res
-      .status(401)
-      .send({ message: 'Необходима авторизация' });
+      .status(STATUSES.AUTH)
+      .send({ message: AUTH_FAILED_MESSAGE });
 
     return;
   }

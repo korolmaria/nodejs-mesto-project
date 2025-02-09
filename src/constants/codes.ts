@@ -1,0 +1,10 @@
+enum STATUSES {
+  NOTFOUND = 404,
+  SERVER = 500,
+  QUERIES = 400,
+  AUTH = 401,
+  NOTCORRECTDATA = 409,
+  CREATED = 201
+}
+
+export default STATUSES;

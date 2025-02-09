@@ -3,6 +3,8 @@ import bcrypt from 'bcryptjs';
 import user from '../models/user';
 import { IInfoRequest } from '../interface';
 import NotFoundError from '../errors/not-found-err';
+import { USER_NOT_FOUND_MESSAGE } from '../constants/errors';
+import STATUSES from '../constants/codes';
 
 export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
   user.find({})
@@ -16,7 +18,7 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
       ...req.body,
       password: hash,
     }))
-    .then((user) => res.status(201).send({ user }.user))
+    .then((user) => res.status(STATUSES.CREATED).send({ user }.user))
     .catch(next);
 };
 
@@ -26,7 +28,7 @@ export const findUserById = async (req: Request, res: Response, next: NextFuncti
       if (user) {
         res.send({ user }.user);
       } else {
-        throw new NotFoundError('Такой пользоатель не существует!');
+        throw new NotFoundError(USER_NOT_FOUND_MESSAGE);
       }
     })
     .catch(next);
@@ -58,7 +60,7 @@ export const getCurrentUserInfo = async (req: IInfoRequest, res: Response, next:
       if (user) {
         res.send({ user }.user);
       } else {
-        throw new NotFoundError('Такой пользоатель не существует!');
+        throw new NotFoundError(USER_NOT_FOUND_MESSAGE);
       }
     })
     .catch(next);

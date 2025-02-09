@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import user from '../models/user';
+import { USER_FAILED_MESSAGE } from '../constants/errors';
+import STATUSES from '../constants/codes';
 
 const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
@@ -15,7 +17,7 @@ const login = async (req: Request, res: Response) => {
       res.send({ message: 'Токен сохранен' });
     })
     .catch(() => {
-      res.status(401).send({ message: 'Неправильные почта или пароль' });
+      res.status(STATUSES.AUTH).send({ message: USER_FAILED_MESSAGE });
     });
 };
 

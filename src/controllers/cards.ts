@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from 'express';
 import { IInfoRequest } from '../interface';
 import card from '../models/card';
 import NotFoundError from '../errors/not-found-err';
+import { CARD_NOT_FOUND_MESSAGE, NOT_PERMISSIONS_MESSAGE } from '../constants/errors';
+import STATUSES from '../constants/codes';
 
 export const getCards = async (req: Request, res: Response, next: NextFunction) => {
   card.find({})
@@ -13,7 +15,7 @@ export const createCard = async (req: IInfoRequest, res: Response, next: NextFun
   const { name, link } = req.body;
 
   card.create({ name, link, owner: req.user?._id })
-    .then((card) => res.status(201).send({ card }.card))
+    .then((card) => res.status(STATUSES.CREATED).send({ card }.card))
     .catch(next);
 };
 
@@ -23,7 +25,7 @@ export const findCardById = async (req: Request, res: Response, next: NextFuncti
       if (card) {
         res.send({ card }.card);
       } else {
-        throw new NotFoundError('Нет картчоки с таким id');
+        throw new NotFoundError(CARD_NOT_FOUND_MESSAGE);
       }
     })
     .catch(next);
@@ -33,7 +35,7 @@ export const deleteCardById = async (req: IInfoRequest, res: Response, next: Nex
   card.findOneAndDelete({ owner: req.user?._id, _id: req.params.cardId })
     .then((card) => {
       if (!card) {
-        res.status(404).send({ message: 'У вас нет прав на эту операцию' });
+        res.status(STATUSES.NOTFOUND).send({ message: NOT_PERMISSIONS_MESSAGE });
         return;
       }
 

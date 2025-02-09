@@ -1,4 +1,6 @@
 import { model, Model, Schema } from 'mongoose';
+import validator from 'validator';
+import { INVALID_LINK_MESSAGE } from '../constants/errors';
 
 export interface ICard {
     name: string;
@@ -19,6 +21,10 @@ const cardSchema = new Schema<ICard, CardModel>({
   },
   link: {
     type: String,
+    validate: {
+      validator: (v: string) => validator.isURL(v),
+      message: INVALID_LINK_MESSAGE,
+    },
     required: true,
   },
   owner: {

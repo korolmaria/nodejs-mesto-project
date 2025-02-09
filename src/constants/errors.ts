@@ -1,0 +1,10 @@
+export const USER_NOT_FOUND_MESSAGE = 'Такой пользоатель не существует!';
+export const CARD_NOT_FOUND_MESSAGE = 'Нет картчоки с таким id!';
+export const NOT_PERMISSIONS_MESSAGE = 'У вас нет прав на эту операцию';
+export const INVALID_QUERY_PARAMETERS_MESSAGE = 'Переданы некорректные данные!';
+export const USER_FAILED_MESSAGE = 'Неправильные почта или пароль';
+export const AUTH_FAILED_MESSAGE = 'Необходима авторизация';
+export const SERVER_FAILED_MESSAGE = 'На сервере произошла ошибка';
+export const INVALID_USER_DATA_MESSAGE = 'Пользователь с таким email уже существует';
+export const INVALID_LINK_MESSAGE = 'Неправильный формат для ссылки';
+export const INVALID_EMAIL_FORMAT = 'Неправильный формат почты';

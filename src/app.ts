@@ -10,11 +10,13 @@ import { createUser } from './controllers/users';
 import auth from './middlewares/auth';
 import { errorLogger, requestLogger } from './middlewares/logger';
 import 'dotenv/config';
+import configs from './config';
+import { INVALID_QUERY_PARAMETERS_MESSAGE, INVALID_USER_DATA_MESSAGE, SERVER_FAILED_MESSAGE } from './constants/errors';
+import STATUSES from './constants/codes';
 
-const { PORT = 3000 } = process.env;
 const app = express();
 
-mongoose.connect('mongodb://localhost:27017/mestodb').then(() => {});
+mongoose.connect(`${configs.DB_HOST}:${configs.DB_PORT}/${configs.DB}`).then(() => {});
 
 app.use(limiter);
 app.use(express.json());
@@ -43,22 +45,23 @@ app.use((err: IAppError, req: Request, res: Response, next: NextFunction) => {
   const { statusCode, message, name } = err;
 
   if (err.name === 'MongoServerError') {
-    res.status(409).send({ message: 'Пользователь с таким email уже существует.' });
+    res.status(STATUSES.NOTCORRECTDATA).send({ message: INVALID_USER_DATA_MESSAGE });
   }
 
   if (['CastError'].includes(name)) {
-    res.status(400).send({ message: 'Переданы некорректные данные!' });
+    res.status(STATUSES.QUERIES).send({ message: INVALID_QUERY_PARAMETERS_MESSAGE });
   }
 
   if (['ValidationError', 'Error'].includes(name)) {
-    res.status(400).send({ message });
+    res.status(STATUSES.QUERIES).send({ message });
   }
 
-  res.status(statusCode || 500).send({ message: statusCode === 500 ? 'На сервере произошла ошибка!' : message });
+  res.status(statusCode || STATUSES.SERVER)
+    .send({ message: statusCode === 500 ? SERVER_FAILED_MESSAGE : message });
 });
 
 app.use('*', (req: Request, res: Response) => {
-  res.status(404).send({ message: 'Переданы некорректные данные!' });
+  res.status(STATUSES.NOTFOUND).send({ message: INVALID_QUERY_PARAMETERS_MESSAGE });
 });
 
-app.listen(PORT);
+app.listen(configs.PORT);

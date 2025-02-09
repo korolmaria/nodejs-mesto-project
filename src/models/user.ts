@@ -4,6 +4,7 @@ import {
 import validator from 'validator';
 import bcrypt from 'bcryptjs';
 import NotFoundUser from '../errors/not-auth';
+import { INVALID_EMAIL_FORMAT } from '../constants/errors';
 
 export interface IUser {
     email: string,
@@ -30,7 +31,7 @@ const userSchema = new Schema<IUser, UserModel>({
     unique: true,
     validate: {
       validator: (v: string) => validator.isEmail(v),
-      message: 'Неправильный формат почты',
+      message: INVALID_EMAIL_FORMAT,
     },
   },
   password: {
